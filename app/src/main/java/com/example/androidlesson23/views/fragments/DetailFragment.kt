@@ -15,7 +15,6 @@ import com.example.androidlesson23.viewmodels.DetailViewModel
 import com.example.androidlesson23.views.fragments.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding::inflate) {
 
@@ -25,38 +24,23 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
-        val guidelinePercent = if (isTablet()) 0.50f else 0.40f
-        val scaleType = if (isTablet()) ImageView.ScaleType.FIT_XY else ImageView.ScaleType.CENTER_CROP
-        binding.guideline5.setGuidelinePercent(guidelinePercent)
-        binding.imageView.scaleType = scaleType
-
-
-
         val productId = args.id.toInt()
         viewModel.getProductById(productId)
         observeData()
-
-
     }
 
     private fun observeData() {
         viewModel.product.observe(viewLifecycleOwner) { item ->
             item?.let {
-
-                binding.textView1.text = it.title?:"No description"
-                binding.textView2.text = it.description?:"No description"
+                binding.textView1.text = it.title ?: "No title"
+                binding.textView2.text = it.description ?: "No description"
                 binding.textView3.text = "Price: ${it.price?.toString() ?: ""} $"
                 binding.imageView.loadImageWithoutBindingAdapter(it.image)
-
                 setStarRating(it.rating?.rate, binding.star1, binding.star2, binding.star3, binding.star4, binding.star5)
-
-
             }
         }
 
-        viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             if (isLoading) {
                 binding.progressBarContainer.progressBar2.visible()
                 hideOtherWidgets()
@@ -82,7 +66,6 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
         binding.detailConstraintLayout.visible()
     }
 
-
     private fun setStarRating(rating: Double?, vararg starImageViews: ImageView) {
         val maxStars = starImageViews.size
         val filledStars = (rating ?: 0.0).coerceIn(0.0, maxStars.toDouble()).toInt()
@@ -95,12 +78,4 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
             }
         }
     }
-
-
-    private fun isTablet(): Boolean {
-
-        val configuration = resources.configuration
-        return configuration.smallestScreenWidthDp >= 600
-    }
-
 }
