@@ -53,8 +53,10 @@ class HomeViewModel @Inject constructor(
                 is Resource.Success -> {
                     loading.value = false
                     val itemresponse = response.data
-                    if (itemresponse != null && itemresponse.isNotEmpty()) {
-                        _categories.value = itemresponse.orEmpty()
+                    if (!itemresponse.isNullOrEmpty()) {
+                        itemresponse.let {
+                            _categories.value =it
+                        }
                         originalCategoryList=itemresponse.orEmpty()
                     } else {
                         error.value = "No categories found"
