@@ -7,5 +7,5 @@ import com.example.androidlesson23.models.entities.ProductEntity
 @Database(entities = [ProductEntity::class], version = 1)
 abstract class ProductDatabase : RoomDatabase() {
 
-    abstract fun createDAO(): LocalDao
+    abstract fun createProductDAO(): LocalProductDAO
 }
