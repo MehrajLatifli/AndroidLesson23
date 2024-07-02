@@ -41,7 +41,6 @@ class DetailViewModel @Inject constructor(private val repo: ProductRepository,  
                     if (itemResponse != null) {
                         _product.value = itemResponse!!
 
-                        // Check if basket entity exists in local database
                         withContext(Dispatchers.IO) {
                             val localBaskets =
                                 repo2.getBasketEntity().filter { it.id == itemResponse.id }
